@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>docs.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="store-manager-l08---documentation-darchitecture">Store Manager L08 - Documentation d'Architecture</h1>
+<p>Ce document, basé sur le modèle arc42, décrit une API REST de gestion de magasin avec capacités GraphQL pour le Labo 08, LOG430.</p>
+<h2 id="1-introduction-et-objectifs">1. Introduction et Objectifs</h2>
+<h3 id="panorama-des-exigences">Panorama des exigences</h3>
+<p>L'application « Store Manager » est un système avec architecture microservices pour la gestion des utilisateurs, articles, commandes et stock dans un petit magasin. Elle sert de projet éducatif pour démontrer :</p>
+<ul>
+<li>L'implémentation d'une architecture API REST avec Flask</li>
+<li>L'intégration GraphQL pour des requêtes de données flexibles</li>
+<li>La fonctionnalité de gestion de stock avec cache Redis</li>
+<li>Le support multi-bases de données (MySQL et Redis)</li>
+<li>La comparaison des approches REST vs GraphQL</li>
+<li>L'optimisation des jointures SQL avec SQLAlchemy</li>
+<li>L'utilisation d'un API Gateway (KrakenD) pour le contrôle de timeout et rate limiting</li>
+<li>L'utilisation d'un broker Kafka pour la communication asynchrone avec des microservices</li>
+<li>La transition vers une architecture microservices avec séparation des responsabilités</li>
+<li>L'implémentation de Sagas chorégraphiées pour la coordination distribuée des opérations</li>
+<li>L'application du patron CQRS (Command Query Responsibility Segregation)</li>
+<li>L'utilisation du patron Outbox pour assurer la tolérance aux pannes en architecture event-driven</li>
+</ul>
+<p>Nous ferons évoluer ce projet tout au long du cours LOG430, en intégrant de nouvelles fonctionnalités et en faisant évoluer notre architecture pour répondre aux nouvelles exigences. La progression va d'une architecture monolithique vers une architecture microservices avec saga chorégraphiée event-driven.</p>
+<h3 id="objectifs-qualit%C3%A9">Objectifs qualité</h3>
+<table>
+<thead>
+<tr>
+<th>Priorité</th>
+<th>Objectif qualité</th>
+<th>Scénario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Extensibilité</strong></td>
+<td>Ajout facile de nouveaux endpoints API et clients grâce aux principes REST</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Flexibilité</strong></td>
+<td>Support GraphQL permet aux clients de requêter exactement les données nécessaires</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Performance</strong></td>
+<td>Cache Redis pour les données de stock et optimisation des jointures SQL</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Maintenabilité</strong></td>
+<td>Séparation claire des responsabilités via les patrons MVC+CQRS et architecture microservices</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Fiabilité</strong></td>
+<td>Rate limiting et timeout via KrakenD pour protéger les services backend ; Saga chorégraphiée avec Outbox Pattern pour garantir la cohérence des transactions distribuées</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Scalabilité</strong></td>
+<td>Architecture microservices permet la mise à l'échelle indépendante des services ; Kafka permet une communication asynchrone découplée</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Tolérance aux pannes</strong></td>
+<td>Patron Outbox et architecture event-driven permettent la récupération des opérations après redémarrage des services</td>
+</tr>
+</tbody>
+</table>
+<h3 id="parties-prenantes-stakeholders">Parties prenantes (Stakeholders)</h3>
+<ul>
+<li><strong>Développeuses et développeurs</strong> : Apprendre/enseigner l'architecture API REST, GraphQL, microservices et les patrons de services web modernes</li>
+<li><strong>Employées et employés du magasin</strong> : Utilisatrices et utilisateurs gérant les articles, commandes et stock via l'API</li>
+<li><strong>Clientes et clients du magasin</strong> : Utilisatrices et utilisateurs finales servis par l'application (indirectement via les interactions avec les employé·es)</li>
+<li><strong>Fournisseurs</strong> : Partenaires externes utilisant l'endpoint GraphQL pour vérifier l'état du stock et envoyer des données de réapprovisionnement</li>
+</ul>
+<h2 id="2-contraintes-darchitecture">2. Contraintes d'architecture</h2>
+<table>
+<thead>
+<tr>
+<th>Contrainte</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Technologie</strong></td>
+<td>Utilisation de Python 3, Flask, MySQL, Redis, KrakenD, Kafka et Docker</td>
+</tr>
+<tr>
+<td><strong>Déploiement</strong></td>
+<td>Déploiement en conteneurs Docker avec communication réseau entre services via un réseau Docker partagé</td>
+</tr>
+<tr>
+<td><strong>Communication</strong></td>
+<td>Communication asynchrone entre microservices via Kafka comme event broker ; communication synchrone uniquement via Outbox Pattern pour les opérations critiques</td>
+</tr>
+<tr>
+<td><strong>Éducatif</strong></td>
+<td>L'application doit clairement démontrer les principes REST vs GraphQL, la gestion de stock, les microservices, les Sagas chorégraphiées, CQRS et les bonnes pratiques API</td>
+</tr>
+<tr>
+<td><strong>Conception API</strong></td>
+<td>Doit suivre les principes RESTful et fournir une alternative GraphQL pour les requêtes flexibles</td>
+</tr>
+<tr>
+<td><strong>API Gateway</strong></td>
+<td>KrakenD comme point d'entrée unique pour tous les appels API avec contrôle de rate limiting et timeout</td>
+</tr>
+<tr>
+<td><strong>Tolérance aux pannes</strong></td>
+<td>Patron Outbox pour assurer la cohérence des transactions dans une architecture event-driven distribuée</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-port%C3%A9e-et-contexte-du-syst%C3%A8me">3. Portée et contexte du système</h2>
+<h3 id="contexte-m%C3%A9tier">Contexte métier</h3>
+<p><img src="activity.png" alt="Activity"></p>
+<p>Le système permet aux employé·es du magasin de :</p>
+<ul>
+<li>Gérer les comptes utilisateurs (employé·es et clientes)</li>
+<li>Gérer les articles vendus par le magasin</li>
+<li>Traiter les commandes des clientes</li>
+<li>Suivre et gérer les niveaux de stock des articles</li>
+<li>Générer des rapports de stock</li>
+<li>Permettre aux fournisseurs de consulter l'état du stock via GraphQL</li>
+</ul>
+<h3 id="contexte-technique">Contexte technique</h3>
+<ul>
+<li><strong>Applications clientes</strong> : Postman, applications fournisseurs, potentiels frontends web/mobiles</li>
+<li><strong>Couche API</strong> : API REST Flask avec endpoint GraphQL</li>
+<li><strong>Couche base de données</strong> : Backend MySQL avec cache Redis</li>
+<li><strong>API Gateway</strong> : KrakenD pour le routage, rate limiting et timeout</li>
+<li><strong>Communication</strong> : Requêtes HTTP/HTTPS entre clients, gateway et microservices</li>
+</ul>
+<h2 id="4-strat%C3%A9gie-de-solution">4. Stratégie de solution</h2>
+<table>
+<thead>
+<tr>
+<th>Problème</th>
+<th>Approche de solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standardisation API</strong></td>
+<td>Principes REST avec méthodes HTTP et nommage de ressources appropriés</td>
+</tr>
+<tr>
+<td><strong>Requêtes de données flexibles</strong></td>
+<td>Endpoint GraphQL pour les clients nécessitant des champs de données spécifiques</td>
+</tr>
+<tr>
+<td><strong>Gestion de stock</strong></td>
+<td>Mises à jour automatiques du stock lors de création/suppression de commandes</td>
+</tr>
+<tr>
+<td><strong>Performance</strong></td>
+<td>Cache Redis pour les données de stock fréquemment accédées</td>
+</tr>
+<tr>
+<td><strong>Support multi-BD</strong></td>
+<td>MySQL pour l'écriture, Redis pour la lecture (rapports)</td>
+</tr>
+<tr>
+<td><strong>Protection des services</strong></td>
+<td>KrakenD API Gateway pour rate limiting et timeout</td>
+</tr>
+<tr>
+<td><strong>Séparation des responsabilités</strong></td>
+<td>Microservice dédié pour la gestion des commandes ; Kafka comme event broker</td>
+</tr>
+<tr>
+<td><strong>Scalabilité</strong></td>
+<td>Architecture microservices permettant la mise à l'échelle indépendante</td>
+</tr>
+<tr>
+<td><strong>Coordination distribuée</strong></td>
+<td>Saga chorégraphiée : chaque service réagit aux événements Kafka sans orchestrateur central</td>
+</tr>
+<tr>
+<td><strong>Tolérance aux pannes</strong></td>
+<td>Patron Outbox pour persister les événements avant envoi à Kafka ; OutboxProcessor pour relancer les opérations après redémarrage</td>
+</tr>
+<tr>
+<td><strong>Cohérence transactionnelle</strong></td>
+<td>CQRS pour séparer les opérations d'écriture (Commands) des opérations de lecture (Queries)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-vue-des-blocs-de-construction">5. Vue des blocs de construction</h2>
+<p><img src="class.png" alt="Class">
+<img src="component.png" alt="Component">
+<img src="state_machine.png" alt="State Machine"></p>
+<h3 id="composants-cl%C3%A9s">Composants clés :</h3>
+<ul>
+<li><strong>Contrôleurs API</strong> : Gèrent les requêtes et réponses HTTP</li>
+<li><strong>Couche logique métier</strong> : Traitement des commandes, gestion de stock</li>
+<li><strong>Models avec SQLAlchemy</strong> : Abstraction de l'accès aux bases de données</li>
+<li><strong>Cache Redis</strong> : Mise en cache des données de stock pour la performance</li>
+<li><strong>Schéma GraphQL</strong> : Interface de requête flexible pour les fournisseurs</li>
+<li><strong>Kafka Producer</strong> : Producteur d'événements qui envoie les messages à Kafka pour notification des microservices</li>
+<li><strong>Kafka Consumer</strong> : Consommateur d'événements qui réagit aux messages publiés sur les topics Kafka</li>
+<li><strong>Event Handlers</strong> : Réagissent aux événements Kafka et exécutent les opérations métier ou les compensations</li>
+<li><strong>Outbox Table</strong> : Stocke les événements à envoyer pour assurer la tolérance aux pannes</li>
+<li><strong>OutboxProcessor</strong> : Lit la table Outbox et relance l'envoi des événements après redémarrage</li>
+<li><strong>HandlerRegistry</strong> : Registre centralisé mappant les types d'événements à leurs handlers correspondants</li>
+</ul>
+<h2 id="6-vue-dex%C3%A9cution">6. Vue d'exécution</h2>
+<p><img src="use_case.png" alt="Use Case">
+<img src="outbox.png" alt="Outbox"></p>
+<h3 id="sc%C3%A9narios-cl%C3%A9s">Scénarios clés :</h3>
+<ol>
+<li><strong>Traitement des commandes</strong> : Saga chorégraphiée où chaque microservice réagit de manière autonome aux événements Kafka</li>
+<li><strong>Compensation automatique</strong> : En cas d'erreur, les handlers déclenchent les événements de compensation (ex: StockIncreased)</li>
+<li><strong>Rapports de stock</strong> : Génération de rapports de stock complets avec détails des articles</li>
+<li><strong>Requêtes GraphQL</strong> : Fournisseurs interrogent des champs de données de stock spécifiques</li>
+<li><strong>Réapprovisionnement de stock</strong> : Ajout de quantités de stock aux articles existants</li>
+<li><strong>Récupération après panne</strong> : OutboxProcessor redémarre les opérations non complétées après redémarrage du service</li>
+</ol>
+<h2 id="7-vue-de-d%C3%A9ploiement">7. Vue de déploiement</h2>
+<p><img src="deployment.png" alt="Deployment"></p>
+<h3 id="architecture-conteneurs">Architecture conteneurs :</h3>
+<ul>
+<li><strong>Conteneur API et bases de données</strong> : Application Flask, MySQL, Redis.</li>
+<li><strong>Conteneur Payment Service</strong> : API Flask dédiée aux <a href="https://github.com/guteacher/log430-a25-labo5-payment">paiements</a></li>
+<li><strong>KrakenD</strong> : API Gateway</li>
+<li><strong>Réseau Docker</strong> : Permet la communication entre conteneurs</li>
+</ul>
+<h2 id="8-concepts-transversaux">8. Concepts transversaux</h2>
+<ul>
+<li><strong>Principes REST</strong> : Client-serveur, sans état, interface uniforme, système en couches</li>
+<li><strong>GraphQL</strong> : Langage de requête pour la récupération flexible de données</li>
+<li><strong>Architecture Event-Driven</strong> : Microservices communiquent via des événements asynchrones à travers Kafka</li>
+<li><strong>Saga Chorégraphiée</strong> : Coordination distribuée sans orchestrateur central ; chaque service réagit aux événements et déclenche les événements suivants</li>
+<li><strong>CQRS (Command Query Responsibility Segregation)</strong> : Séparation des opérations d'écriture (Commands) et de lecture (Queries)</li>
+<li><strong>Outbox Pattern</strong> : Garantit la durabilité des événements en les stockant dans une table locale avant envoi à Kafka</li>
+<li><strong>Stratégie de cache</strong> : Redis pour l'optimisation de la lecture des données de stock</li>
+<li><strong>Patrons de base de données</strong> : ORM avec SQLAlchemy, gestion de sessions</li>
+<li><strong>Communication conteneurs</strong> : Réseaux Docker pour la découverte de services</li>
+<li><strong>API Gateway Pattern</strong> : Point d'entrée unique avec KrakenD</li>
+<li><strong>Microservices Pattern</strong> : Séparation des responsabilités par domaine métier</li>
+<li><strong>Rate Limiting</strong> : Protection contre les abus et surcharge</li>
+<li><strong>Circuit Breaker</strong> : Timeout control pour éviter les blocages</li>
+</ul>
+<h2 id="9-d%C3%A9cisions-darchitecture">9. Décisions d'architecture</h2>
+<p>Veuillez consulter le fichier <code>/docs/adr/adr001.md</code>.</p>
+<h2 id="10-exigences-qualit%C3%A9">10. Exigences qualité</h2>
+<h3 id="extensibilit%C3%A9">Extensibilité</h3>
+<ul>
+<li>Ajout facile de nouveaux endpoints REST suivant les patrons établis</li>
+<li>Le schéma GraphQL peut être étendu pour de nouvelles exigences de données</li>
+<li>Nouveaux event handlers peuvent être enregistrés dans HandlerRegistry sans modification du code existant</li>
+</ul>
+<h3 id="flexibilit%C3%A9">Flexibilité</h3>
+<ul>
+<li>GraphQL permet aux clients de demander exactement les données dont ils ont besoin</li>
+<li>Support pour plusieurs backends de base de données (MySQL, Redis)</li>
+<li>Architecture microservices permet des changements indépendants</li>
+<li>Nouveaux événements peuvent être ajoutés à la saga sans modification de l'orchestration</li>
+</ul>
+<h3 id="performance">Performance</h3>
+<ul>
+<li>Cache Redis pour les données de stock réduit la charge de base de données</li>
+<li>Optimisation des jointures SQL pour les requêtes complexes</li>
+<li>Communication asynchrone via Kafka réduit le couplage entre services</li>
+</ul>
+<h3 id="maintenabilit%C3%A9">Maintenabilité</h3>
+<ul>
+<li>Séparation claire des préoccupations avec les patrons MVC+CQRS</li>
+<li>Conventions de nommage cohérentes à travers toutes les couches</li>
+<li>Conteneurisation Docker pour des environnements cohérents</li>
+<li>Microservices permettent des déploiements indépendants</li>
+<li>Handlers dédiés pour chaque transition d'état de la saga</li>
+</ul>
+<h3 id="fiabilit%C3%A9">Fiabilité</h3>
+<ul>
+<li>Rate limiting via KrakenD protège contre les abus</li>
+<li>Timeout control évite les blocages</li>
+<li>Isolation des pannes via l'architecture microservices</li>
+<li>Patron Outbox garantit la persistence des événements même en cas de panne</li>
+<li>OutboxProcessor automatise la récupération après redémarrage</li>
+</ul>
+<h3 id="scalabilit%C3%A9">Scalabilité</h3>
+<ul>
+<li>Microservices peuvent être mis à l'échelle indépendamment</li>
+<li>KrakenD peut gérer la distribution de charge</li>
+<li>Base de données et cache séparés permettent une mise à l'échelle horizontale</li>
+<li>Communication asynchrone permet une meilleure répartition de charge</li>
+</ul>
+<h3 id="tol%C3%A9rance-aux-pannes">Tolérance aux pannes</h3>
+<ul>
+<li>Événements sont persistés dans la table Outbox avant envoi à Kafka</li>
+<li>Saga chorégraphiée peut continuer même si certains services sont temporairement indisponibles</li>
+<li>OutboxProcessor retraite les opérations non complétées lors du redémarrage</li>
+<li>Compensation automatique en cas d'erreur dans une étape de la saga</li>
+</ul>
+<h2 id="11-risques-et-dettes-techniques">11. Risques et dettes techniques</h2>
+<p>Voici un résumé des risques et des dettes techniques liés à l'application de gestion de magasin. S'agissant d'une application pédagogique conçue pour explorer les concepts architecturaux, nous assumons ces risques, qui n'ont pas besoin d'être abordés lors des travaux pratiques.</p>
+<table>
+<thead>
+<tr>
+<th>Risque</th>
+<th>Impact</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cohérence du cache</strong></td>
+<td>Les données de stock dans Redis peuvent devenir incohérentes avec la base de données</td>
+<td>Implémenter des stratégies appropriées d'invalidation de cache</td>
+</tr>
+<tr>
+<td><strong>Securité des informations de stock</strong></td>
+<td>Aucun de nos endpoints d'API n'est authentifié. Si cela peut ne pas poser de problème majeur si l'application est utilisée uniquement au sein du réseau d'un seul magasin, cela devient problématique dès que nous ouvrons certains endpoints, comme le point de terminaison GraphQL, à des utilisateurs externes.</td>
+<td>Créez un système d'authentification pour le point de terminaison GraphQL, ou pour tous les endpoints pour plus de sécurité</td>
+</tr>
+<tr>
+<td><strong>Cohérence des stocks par rapport à la réalité</strong></td>
+<td>Dans l'implémentation actuelle, il n'existe aucun contrôle des stocks maximum/minimum. Les stocks peuvent être négatifs, par exemple.</td>
+<td>Implémenter des vérifications de limites de stock</td>
+</tr>
+<tr>
+<td><strong>Défaillance du event broker</strong></td>
+<td>Si l'event broker Kafka cesse de fonctionner, la communication entre les services et l'exécution des sagas sera immédiatement compromise.</td>
+<td>Utiliser un cluster Kafka avec plusieurs instances du broker, surveiller les instances et leur fournir les ressources informatiques nécessaires pour qu'elles fonctionnent toujours avec des performances élevées.</td>
+</tr>
+<tr>
+<td><strong>Cohérence des commandes en cas d'échec à un point spécifique de la saga</strong></td>
+<td>Si le Store Manager s'arrête avant la création de l'enregistrement dans la table Outbox, la commande restera dans la base de données sans un payment_id. À moins que nous supprimions ou modifiions manuellement la commande, elle ne sera pas mise à jour.</td>
+<td>Inclure les informations de la commande dans la table Outbox immédiatement après la création de la commande.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="12-glossaire">12. Glossaire</h2>
+<table>
+<thead>
+<tr>
+<th>Terme</th>
+<th>Définition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>API</strong></td>
+<td>Application Programming Interface : interface de programmation d'applications</td>
+</tr>
+<tr>
+<td><strong>CQRS</strong></td>
+<td>Command Query Responsibility Segregation : patron séparant les opérations d'écriture (Commands) des opérations de lecture (Queries)</td>
+</tr>
+<tr>
+<td><strong>GraphQL</strong></td>
+<td>Langage de requête pour API permettant aux clients de demander des données spécifiques</td>
+</tr>
+<tr>
+<td><strong>REST</strong></td>
+<td>Representational State Transfer : style architectural pour les services web</td>
+</tr>
+<tr>
+<td><strong>RESTful</strong></td>
+<td>APIs qui adhèrent aux principes REST</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

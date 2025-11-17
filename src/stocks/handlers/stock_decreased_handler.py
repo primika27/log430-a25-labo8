@@ -5,8 +5,11 @@ Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 from typing import Dict, Any
 import config
+from db import get_sqlalchemy_session
 from event_management.base_handler import EventHandler
 from orders.commands.order_event_producer import OrderEventProducer
+from payments.models.outbox import Outbox
+from payments.outbox_processor import OutboxProcessor
 
 
 class StockDecreasedHandler(EventHandler):
@@ -22,25 +25,39 @@ class StockDecreasedHandler(EventHandler):
     
     def handle(self, event_data: Dict[str, Any]) -> None:
         """Execute every time the event is published"""
-        '''
-        TODO: Consultez le diagramme de machine à états pour savoir quelle opération 
-        effectuer dans cette méthode. 
+        # Selon le diagramme: StockDecreased (état 2) -> CREATING_PAYMENT (état 3)
+        # Le stock a été diminué avec succès, maintenant on doit créer le paiement
+        session = get_sqlalchemy_session()
         
-        **Conseil** : si vous préférez, avant de travailler sur l'implémentation event-driven, 
-        effectuez un appel synchrone (requête HTTP) à l'API Payments, attendez le résultat, puis 
-        continuez la saga. L'approche synchrone peut être plus facile à comprendre dans un premier temps.
-          
-        En revanche, dans une implémentation 100% event-driven, ce StockDecreasedHandler se trouvera 
-        dans l'API Payments et non dans Store Manager, car c'est l'API Payments qui doit 
-        être notifiée de la mise à jour du stock afin de générer une transaction de paiement.
-        '''
         try:
-            # Si la transaction de paiement a été crée, déclenchez PaymentCreated.
-            event_data['event'] = "PaymentCreated"
-            self.logger.debug(f"payment_link={event_data['payment_link']}")
-            OrderEventProducer().get_instance().send(config.KAFKA_TOPIC, value=event_data)
+            # Créer un enregistrement dans la table Outbox pour garantir la tolérance aux pannes
+            outbox_item = Outbox(
+                user_id=event_data['user_id'],
+                order_id=event_data['order_id'],
+                total_amount=event_data['total_amount'],
+                order_items=event_data['order_items']
+            )
+            session.add(outbox_item)
+            session.commit()
+            session.refresh(outbox_item)
+            
+            self.logger.debug(f"Enregistrement Outbox créé pour order_id={event_data['order_id']}")
+            
+            # Lancer le traitement du paiement via OutboxProcessor
+            outbox_processor = OutboxProcessor()
+            outbox_processor.run(outbox_item)
+            
+            # Note: OutboxProcessor enverra soit PaymentCreated soit PaymentCreationFailed
+            # donc nous ne publions pas d'événement ici
+            
         except Exception as e:
-            # TODO: Si la transaction de paiement n'était pas crée, déclenchez l'événement adéquat selon le diagramme.
+            session.rollback()
+            self.logger.error(f"Erreur lors de la création du paiement: {e}")
+            # Si la création de l'enregistrement Outbox échoue, déclencher PaymentCreationFailed
+            event_data['event'] = "PaymentCreationFailed"
             event_data['error'] = str(e)
+            OrderEventProducer().get_instance().send(config.KAFKA_TOPIC, value=event_data)
+        finally:
+            session.close()
 
 
