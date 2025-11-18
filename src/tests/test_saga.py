@@ -5,6 +5,7 @@ Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 
 import json
+import time
 from logger import Logger
 import pytest
 from store_manager import app
@@ -37,6 +38,10 @@ def test_saga(client):
     order_id = response.get_json()['order_id']
     assert order_id > 0
     logger.debug(f"Created order with ID: {order_id}")
+    
+    # Wait for the saga to complete (asynchronous processing)
+    logger.debug("Waiting for saga to complete...")
+    time.sleep(5)  # Give time for Kafka events to process
     
     # 2. Check if order really exists and whether it has a payment link
     response = client.get(f'/orders/{order_id}')

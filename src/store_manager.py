@@ -17,16 +17,19 @@ from stocks.handlers.stock_increased_handler import StockIncreasedHandler
 from payments.handlers.payment_created_handler import PaymentCreatedHandler
 from payments.handlers.payment_creation_failed_handler import PaymentCreationFailedHandler
 from orders.queries.order_event_consumer import OrderEventConsumer
+from payments.outbox_processor import OutboxProcessor
 from stocks.schemas.query import Query
 from flask import Flask, request, jsonify
 from orders.controllers.order_controller import create_order, remove_order, get_order, get_report_highest_spending_users, get_report_best_selling_products, update_order
 from orders.controllers.user_controller import create_user, remove_user, get_user
 from stocks.controllers.product_controller import create_product, remove_product, get_product
 from stocks.controllers.stock_controller import get_stock, populate_redis_on_startup, set_stock, get_stock_overview
+from logger import Logger
 
+logger = Logger.get_instance("StoreManager")
 app = Flask(__name__)
 
-# Auto-populate Redis 5s after API startup (to give enough time for the DB to start up as well)
+# Auto-populate Redis after API startup (to give enough time for the DB to start up as well)
 thread = threading.Timer(10.0, populate_redis_on_startup)
 thread.daemon = True
 thread.start()
@@ -50,6 +53,22 @@ consumer_service = OrderEventConsumer(
     registry=registry
 )
 consumer_service.start()
+
+# il faut éxécuter le processeur seulement 1 fois à chaque initialisation
+# Utiliser un timer pour attendre que MySQL soit prêt
+is_outbox_processor_running = False
+def run_outbox_processor():
+    global is_outbox_processor_running
+    if not is_outbox_processor_running:
+        try:
+            OutboxProcessor().run()
+            is_outbox_processor_running = True
+        except Exception as e:
+            logger.error(f"Error running OutboxProcessor: {e}")
+
+outbox_thread = threading.Timer(15.0, run_outbox_processor)
+outbox_thread.daemon = True
+outbox_thread.start()
 
 @app.get('/health-check')
 def health():

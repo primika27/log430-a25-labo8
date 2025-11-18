@@ -31,29 +31,27 @@ class StockDecreasedHandler(EventHandler):
         
         try:
             # Créer un enregistrement dans la table Outbox pour garantir la tolérance aux pannes
-            outbox_item = Outbox(
-                user_id=event_data['user_id'],
+            new_outbox_item = Outbox(
                 order_id=event_data['order_id'],
+                user_id=event_data['user_id'],
                 total_amount=event_data['total_amount'],
                 order_items=event_data['order_items']
             )
-            session.add(outbox_item)
+            session.add(new_outbox_item)
+            session.flush()
             session.commit()
-            session.refresh(outbox_item)
             
             self.logger.debug(f"Enregistrement Outbox créé pour order_id={event_data['order_id']}")
             
             # Lancer le traitement du paiement via OutboxProcessor
-            outbox_processor = OutboxProcessor()
-            outbox_processor.run(outbox_item)
+            OutboxProcessor().run(new_outbox_item)
             
             # Note: OutboxProcessor enverra soit PaymentCreated soit PaymentCreationFailed
             # donc nous ne publions pas d'événement ici
             
         except Exception as e:
             session.rollback()
-            self.logger.error(f"Erreur lors de la création du paiement: {e}")
-            # Si la création de l'enregistrement Outbox échoue, déclencher PaymentCreationFailed
+            self.logger.debug("La création d'une transaction de paiement a échoué : " + str(e))
             event_data['event'] = "PaymentCreationFailed"
             event_data['error'] = str(e)
             OrderEventProducer().get_instance().send(config.KAFKA_TOPIC, value=event_data)

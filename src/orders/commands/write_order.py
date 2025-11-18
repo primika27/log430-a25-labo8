@@ -105,6 +105,14 @@ def modify_order(order_id: int, is_paid: bool, payment_id: int):
 
         session.commit()
         session.refresh(order)
+        
+        # Update Redis to keep CQRS read side in sync
+        r = get_redis_conn()
+        if order is not None:
+            r.hset(f"order:{order_id}", "payment_link", order.payment_link)
+            if is_paid is not None:
+                r.hset(f"order:{order_id}", "is_paid", str(is_paid))
+        
         return True
     except SQLAlchemyError as e:
         session.rollback()
